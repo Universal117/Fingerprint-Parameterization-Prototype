@@ -33,7 +33,7 @@ long long int convertCoord(int input, int keyPos, long long int rand, int minOth
 {
 
 	long long int temp = input;
-	long long int addon = (int)(pow(-1, minOther + key.at(keyPos)))*rand;
+	long long int addon = (int)(pow(-1, minOther + (key.at(keyPos) - '0')))*rand;
 	temp = temp + (addon * (int)(pow(-1, mode + 1)));
 	while (temp < (min + 1))
 		temp = (max - 1) - ((min + 1) - temp - 1);
