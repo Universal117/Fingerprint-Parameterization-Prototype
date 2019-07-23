@@ -22,7 +22,9 @@ do
 	echo "7. Execute a one-to-one fingerprint match"
 	echo "8. Execute a one-to-many fingerprint match"
 	echo "9. Help"
-	echo "10. Exit"
+	echo "10. Change mindtct.exe path"
+	echo "11. Change bozorth3.exe path"
+	echo "12. Exit"
 	read -p "Please make a selection: " mainMenuChoice
 	echo ""
 	
@@ -66,13 +68,21 @@ do
 		echo -e "Scramble/Unscramble .xyt files: Requires valid input directory path 1 that contains .xyt files, valid output directory path, and key. Will scramble or unscrambled the .xyt files based on the key given \n"
 		echo -e "Execute a one-to-one fingerprint match: Requires both input paths to be directories containing xyt files, and requires valid output diretory. Will compare fingerprints of the same name against each other, used to validate that fingerprint.\n"
 		echo -e "Execute a one-to-many fingerprint match: Requires input path 1 to be a directory containing xyt files, input path 2 being a path to a valid .lis file, and a valid output directory. Will compare each fingerprint in input directory against all the ones listed in the .lis file, generates score text files in output directory showing all matching prints. Empty files mean no match was found.\n"
+		echo -e "Change mindtct.exe path: Change the path to mindtct.exe\n"
+		echo -e "Change bozorth3.exe path: Change the path to bozorth3.exe\n"
 		;;
 		10)
+		read -p "Please enter the new mindtct.exe path: " mindtct
+		;;
+		11)
+		read -p "Please enter the new bozorth3.exe path: " bozorth3
+		;;
+		12)
 		echo -e  "Exiting program"
 		break
 		;;
 		*)
-		echo -e "Choice not valid. Please enter a number 0-10"
+		echo -e "Choice not valid. Please enter a number 0-12"
 		;;
 		
 	esac

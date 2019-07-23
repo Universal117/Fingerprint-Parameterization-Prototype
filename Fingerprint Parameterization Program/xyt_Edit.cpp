@@ -4,10 +4,11 @@
 #include <math.h>
 #include <vector>
 #include <algorithm>
+#include <random>
 
-long convertKey(std::string key) //gets the decimal representation of the key. reason its Long not int is due to the greater size needed
+long long int convertKey(std::string key) //gets the decimal representation of the key. reason its Long not int is due to the greater size needed
 {
-	long temp = 0;
+	long long int temp = 0;
 	for (int x = 0; x < key.size(); x++)
 	{
 		if (key.at(x) == '1')
@@ -18,21 +19,21 @@ long convertKey(std::string key) //gets the decimal representation of the key. r
 	return temp;
 }
 
-int convertTheta(int input, int keyPos, int rand, int num1, std::string key, int mode, int maxShift) //converts theta from unscrambled to scrambled, and back again
+long long int convertTheta(int input, int keyPos, long long int rand, int num1, std::string key, int mode, int maxShift) //converts theta from unscrambled to scrambled, and back again
 {
-	int temp = (input + 180) % 360;
-	int addon = ((int)pow(-1, num1 + (key.at(keyPos) - '0')) * rand * key.size()) % maxShift;
+	long long int temp = (input + 180) % 360;
+	long long int addon = ((int)pow(-1, num1 + (key.at(keyPos) - '0')) * rand * key.size()) % maxShift;
 	temp = temp + (addon * (int)(pow(-1,mode+1))); //adds if mode is odd, subtracts is mode is even
 	if (temp < 0)
 		temp = 360 + temp;
 	return temp % 360;
 }
 
-int convertCoord(int input, int keyPos, int rand, int minOther, int max, int min, std::string key, int mode) //converts spatial coordinates from unscrambled to scrambled, and vice versa
+long long int convertCoord(int input, int keyPos, long long int rand, int minOther, int max, int min, std::string key, int mode) //converts spatial coordinates from unscrambled to scrambled, and vice versa
 {
 
-	int temp = input;
-	int addon = (int)(pow(-1, minOther + key.at(keyPos)))*rand;
+	long long int temp = input;
+	long long int addon = (int)(pow(-1, minOther + key.at(keyPos)))*rand;
 	temp = temp + (addon * (int)(pow(-1, mode + 1)));
 	while (temp < (min + 1))
 		temp = (max - 1) - ((min + 1) - temp - 1);
@@ -150,39 +151,41 @@ int main(int argc, char * argv[])
 	original.close();
 
 	//what about seeding a rand and using it here for the function? makes it more random at least.
-	srand(convertKey(key));
+	//srand(convertKey(key));
+	std::mt19937_64 eng(convertKey(key));
+	std::uniform_int_distribution<long long int> dist{LLONG_MIN, LLONG_MAX};
 
 	for (int i = 0; i < list.size() - 1; i++) //this takes each minutia struct in the vector and applies the scrambling/unscrambling procedure.
 	{// 
 		//cout << "Minutua " << i+1 << " is:" << list.at(i) << "\n";
 		if (key.at(circulator) % 2 == 1)
 		{
-			list.at(i).theta = convertTheta(list.at(i).theta, circulator, rand(), num1, key, mode, 45); //when editing x, tighter angle change
+			list.at(i).theta = convertTheta(list.at(i).theta, circulator, dist(eng), num1, key, mode, 45); //when editing x, tighter angle change
 			if (list.at(i).x != minX && list.at(i).x != maxX) //change x unless x is edge
 			{
-				list.at(i).x = convertCoord(list.at(i).x, circulator, ((rand() % ((maxX - 1) - (minX + 1) + 1)) + minX + 1), minY, maxX, minX, key, mode);
+				list.at(i).x = convertCoord(list.at(i).x, circulator, ((dist(eng) % ((maxX - 1) - (minX + 1) + 1)) + minX + 1), minY, maxX, minX, key, mode);
 			}
 			else //change y if it is not edge
 			{
 				if (list.at(i).y != minY && list.at(i).y != maxY)
 				{
-					list.at(i).y = convertCoord(list.at(i).y, circulator, ((rand() % ((maxY - 1) - (minY + 1) + 1)) + minY + 1), minX, maxY, minY, key, mode);
+					list.at(i).y = convertCoord(list.at(i).y, circulator, ((dist(eng) % ((maxY - 1) - (minY + 1) + 1)) + minY + 1), minX, maxY, minY, key, mode);
 				}
 			}
 		}
 		else
 		{
-			list.at(i).theta = convertTheta(list.at(i).theta, circulator, rand(), num1, key, mode, 90);//changing gives a broader theta change
+			list.at(i).theta = convertTheta(list.at(i).theta, circulator, dist(eng), num1, key, mode, 90);//changing gives a broader theta change
 
 			if (list.at(i).y != minY && list.at(i).y != maxY) //same as with x coordinate, change y unless its edge, then change x if it isn't an edge
 			{
-				list.at(i).y = convertCoord(list.at(i).y, circulator, ((rand() % ((maxY - 1) - (minY + 1) + 1)) + minY + 1), minX, maxY, minY, key, mode);
+				list.at(i).y = convertCoord(list.at(i).y, circulator, ((dist(eng) % ((maxY - 1) - (minY + 1) + 1)) + minY + 1), minX, maxY, minY, key, mode);
 			}
 			else
 			{
 				if (list.at(i).x != minX && list.at(i).x != maxX)
 				{
-					list.at(i).x = convertCoord(list.at(i).x, circulator, ((rand() % ((maxX - 1) - (minX + 1) + 1)) + minX + 1), minY, maxX, minX, key, mode);
+					list.at(i).x = convertCoord(list.at(i).x, circulator, ((dist(eng) % ((maxX - 1) - (minX + 1) + 1)) + minX + 1), minY, maxX, minX, key, mode);
 				}
 			}
 
