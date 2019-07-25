@@ -43,10 +43,10 @@ do
 		;;
 		4)
 		read -p "Would you like to add an extra identifier to the end of the mindtcted files? If so, please type the extension. Else, just press Enter" addon
-		./massMindtct $input1 $addon $mindtct $output
+		./massMindtct.sh $input1 $addon $mindtct $output
 		;;
 		5)
-		./listFileGenerator $input1 $output
+		./listFileGenerator.sh $input1 $output
 		;;
 		6)
 		read -p "Press 1 to scramble, 2 to unscramble: " mode

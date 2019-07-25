@@ -12,7 +12,4 @@ do
 	addon="$2"
 	fname="$fname$addon"
 	$3 $f $fname
-	#NEED TO MAKE SURE THESE GO INTO OUTPUT PATH
-	#JUST DO CD YOU DUMB BITCH
-	#DONT LET DR LEISS SEE THESE COMMENTS
 done
